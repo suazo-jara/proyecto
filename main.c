@@ -10,22 +10,6 @@
 
 
 //Estructura
-typedef struct
-{
-   char texto[50];
-   int preRequisitoEvento[2]; 
-   int posicionEvento[2];
-
-} Evento;
-
-typedef struct
-{
-char  ecenario[16][16];
-Pantalla* norte;
-Pantalla* sur;
-Pantalla* este;
-Pantalla* oeste;
-} Pantalla;
 
 typedef struct
 {
@@ -50,7 +34,7 @@ int karma;
 Raza humano = {"Humano", 1,2,3,4,5} ;
 Raza enano  = {"Enano",  1,2,3,4,5} ;
 Raza Elfo   = {"Elfo",   1,2,3,4,5} ;
-//Por si querremos que se mueva en un mapa
+//Por si querremos que navegue con las flechas
 #define arriba 72;
 #define izquierda 75;
 #define derecha 77;
@@ -63,13 +47,6 @@ int dado();
 
 //Main
 int main(){
-char letra;
-letra=getchar();
-int a;
-a=(int)letra;
-
-printf("%i",a);
-
 
 
 }
