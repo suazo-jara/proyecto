@@ -21,7 +21,10 @@ typedef struct
 typedef struct
 {
 char  ecenario[16][16];
-//List* Eventos;
+Pantalla* norte;
+Pantalla* sur;
+Pantalla* este;
+Pantalla* oeste;
 } Pantalla;
 
 typedef struct
@@ -47,15 +50,25 @@ int karma;
 Raza humano = {"Humano", 1,2,3,4,5} ;
 Raza enano  = {"Enano",  1,2,3,4,5} ;
 Raza Elfo   = {"Elfo",   1,2,3,4,5} ;
+//Por si querremos que se mueva en un mapa
+#define arriba 72;
+#define izquierda 75;
+#define derecha 77;
+#define abajo 80;
+#define exit 27;
+
 
 //Pototipos Funciones
 int dado();
 
 //Main
 int main(){
-Personaje prota;
-prota.estadisticas=humano;
-printf("%i",prota.estadisticas.Fuerza);
+char letra;
+letra=getchar();
+int a;
+a=(int)letra;
+
+printf("%i",a);
 
 
 
