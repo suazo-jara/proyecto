@@ -28,6 +28,30 @@ typedef struct
    //Se puede agregar mas
 } Personaje;
 
+typedef struct
+{
+    char nombre[50];
+    char tipo[50];
+    char objetivo[50];
+    int estado;
+} Mision;
+
+typedef struct
+{
+    char nombre[30];
+    char tipo[30];
+    int daño;
+    int vitalidad;
+} Objetos;
+
+typedef struct
+{
+    char nombre[30];
+    char localidad[50];
+    char dialogo1[1000];
+    char dialogo2[1000];  
+}NPC;
+
 //Variables Globales
 //Para las elccion de Raza
 Raza humano = {"Humano", 1, 2, 3, 4, 5};
@@ -47,6 +71,8 @@ int dado();
 //Main
 int main()
 {
+   printf("Bienvenido al juego de rol mas impresionante del mundo\n");
+   
    Personaje jugador = crearPersonaje();
 }
 
