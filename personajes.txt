@@ -1,0 +1,5 @@
+id,nombre,petición,opción A, opción B, consecuencia A, consecuencia B
+
+(Las consecuencias se guardan en un arreglo)
+
+1,Consejero real,"Su Excelencia, ¿quiere un soborno?","¡Guardias!","Me parece...","0 0 -1 0 +1","0 0 +1 0 -1"%
