@@ -1,14 +1,17 @@
-//Librerías
+//Librerias
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <ctype.h>
 #include <string.h>
+#include <math.h>
+#include <time.h>
 #include "list.h"
 #include "Map.h"
 
 //Estructuras
 
-//Tipo nación
+//Tipo Nación
 typedef struct{
    int economia; //0
    int religion; //1
@@ -22,104 +25,159 @@ typedef struct{
    int id;
    char nombre[30];
    char peticion[500];
-
    char opcion_a[30];
-   int consecuencia_a[5];
-
    char opcion_b[30];
+   int consecuencia_a[5];
    int consecuencia_b[5];
 }NPC;
 
-//Funciones principales
-Map *cargar_personajes();
-
-//Funciones auxiliares
+//Funciones
+void leer_archivo(Map*);
+void pasar_consecuencia(char *,NPC*, int);
 int is_equal_int(void *, void *);
+int is_equal_float(void *, void *);
+int lower_than_int(void *, void *);
+int lower_than_float(void *, void *);
 
-//Función main
 int main(){
-   
-   int entrada;
-   Map* personajes = cargar_personajes();
-   
-   do{
-   }while(entrada != 0);
+   Map *personajes = createMap(is_equal_int);
+   setSortFunction(personajes,lower_than_int);
 
-   printf("Abandonas tu cargo como rey de La Embarrada");
-}
+   leer_archivo(personajes);
+   //MOSTRAR PERSONAJES
+   /*
+   NPC *ayuda = firstMap(personajes);
+   while (ayuda)
+   {
+       printf("id:%i  nombre:%s peticion:%s opcion_a:%s opcion_b:%s \n", ayuda->id, ayuda->nombre, ayuda->peticion,ayuda->opcion_a,ayuda->opcion_b);
+       printf("consecuencia_a:");
+       for(int i = 0; i<5;i++){
+           printf("%i ", ayuda->consecuencia_a[i]);
+       }
+       printf("consecuencia_b:");
+       for(int i = 0; i<5;i++){
+           printf("%i ", ayuda->consecuencia_b[i]);
+       }
+       printf("\n");
+       printf("\n");
 
-//Función que carga los personajes desde el archivo "personajes.txt"
-/*
-
-Map *cargar_personajes(){
-   Map *mapa = createMap(is_equal_int); //Mapa que guarda cada personaje por su ID
-   NPC *personaje;
-   FILE *file = fopen("personajes.txt", "r");
-   char lectura[20];
-   int cont = 0; //Contador para leer los datos de cada personaje (7 datos en total x personaje)
-   while (fscanf(file, "%[^,\n]s", lectura) != EOF){
-      fgetc(file);
-      printf("%s\n\n", lectura);
-
-      if (cont == 0) //Lee ID del personaje
-      {
-         personaje = (NPC*) malloc (sizeof(NPC));
-         personaje->id = atoi(lectura);
-         cont++;
-         continue;
-      }
-
-      if (cont == 1){ //Lee nombre del personaje
-         strcpy(personaje->nombre, lectura);
-         cont++;
-         continue;
-      }
-      
-      if (cont == 2){ //Lee la petición del personaje 
-         strcpy(personaje->peticion, lectura);
-         cont++;
-         continue;
-      }
-      
-      if (cont == 3){ //Lee la opción A de la petición
-         strcpy(personaje->opcion_a, lectura);
-         cont++;
-         continue;
-      }
-      
-      if (cont == 4){ //Lee la opción B de la petición
-         strcpy(personaje->opcion_b, lectura);
-         cont++;
-         continue;
-      }
-      
-      if (cont == 5){ //Lee las consecuencias de la opción A
-         strcpy(personaje->consecuencia_a, lectura);
-         cont++;
-         continue;
-      }
-
-      if (cont == 6){ //Lee las consecuencias de la opción B
-         strcpy(personaje->consecuencia_b, lectura);
-         cont++;
-      }
-      
-      if (cont == 7)
-      {
-         cont = 0;
-         insertMap(mapa, &personaje->id, personaje);
-      }
+       ayuda = nextMap(personajes);
    }
-   fclose(file);
-   return mapa;
+   */
+   
+   printf("fin");
+   return 0;
 }
 
-*/
+void leer_archivo(Map *personajes){
+   int cont = 0;
+   int cantidad = -1;//cantidad de personajes
+   int id = 0;
+   char *lectura = (char *)malloc(sizeof(char) * 1000);
+   FILE *archivo = fopen("personajes.txt", "r");
+
+   NPC *npc = (NPC*)malloc(sizeof(NPC));
+
+   while(fscanf(archivo,"%[^%\n]s",lectura) != EOF){
+      fgetc(archivo);
+
+      while(cont<6){
+         fscanf(archivo,"%[^%\n]s",lectura);
+         lectura = (char *)malloc(sizeof(char) * 100);
+         fgetc(archivo);
+         cont++;
+      }
+
+      if(cantidad == 0){
+          npc->id = atoi(lectura);
+      }
+
+      if(cantidad == 1){
+          strcpy(npc->nombre,lectura);
+      }
+
+      if(cantidad == 2){
+          strcpy(npc->peticion,lectura);
+      }
+
+      if(cantidad == 3){
+          strcpy(npc->opcion_a,lectura);
+      }
+
+      if(cantidad == 4){
+          strcpy(npc->opcion_b,lectura);
+      }
+
+      if(cantidad == 5){
+          pasar_consecuencia(lectura,npc,cantidad);
+      }
+      if(cantidad == 6){
+          pasar_consecuencia(lectura,npc,cantidad);
+          insertMap(personajes,&npc->id,npc);
+          npc = (NPC *)malloc(sizeof(NPC));
+          cantidad = -1;
+      }
+      lectura = (char *)malloc(sizeof(char) * 5000);
+      
+      cantidad++;
+
+   }   
+}
+
+void pasar_consecuencia(char *lectura,NPC *npc, int cantidad){
+    int cont = 0;
+    int numero;
+    for(int i = 1;cont<6;i++){
+
+        if(isdigit(lectura[i])){
+            if(cantidad == 5){
+                numero = lectura[i] - '0';
+                if(lectura[i-1] == '-'){
+                    npc->consecuencia_a[cont] = -numero;
+                }else{
+                    npc->consecuencia_a[cont] = numero;
+                }
+            }else{
+                numero = lectura[i] - '0';
+                if(lectura[i-1] == '-'){
+                    npc->consecuencia_b[cont] = -numero;
+                }else{
+                    npc->consecuencia_b[cont] = numero;
+                }
+            }
+            cont++;
+        }
+    }
+}
 
 //Función para comparar claves de tipo int. Retorna 1 si son iguales
 int is_equal_int(void *key1, void *key2)
 {
     if (*(int *)key1 == *(int *)key2)
+        return 1;
+    return 0;
+}
+
+//Función para comparar claves de tipo float. Retorna 1 si son iguales
+int is_equal_float(void *key1, void *key2)
+{
+    if (*(float *)key1 == *(float *)key2)
+        return 1;
+    return 0;
+}
+
+//Función para comparar claves de tipo int. Retorna 1 si key1 < key2
+int lower_than_int(void *key1, void *key2)
+{
+    if (*(int *)key1 < *(int *)key2)
+        return 1;
+    return 0;
+}
+
+//Función para comparar claves de tipo float. Retorna 1 si key1 < key2
+int lower_than_float(void *key1, void *key2)
+{
+    if (*(float *)key1 < *(float *)key2)
         return 1;
     return 0;
 }
