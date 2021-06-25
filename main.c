@@ -35,6 +35,7 @@ typedef struct{
 void leer_archivo(Map*);
 void pasar_consecuencia(char *,NPC*, int);
 void display_menu();
+void juego(Map *);
 
 //Funciones auxiliares
 void mostrar_personajes(Map *);
@@ -60,14 +61,14 @@ int main(){
        scanf("%d", &lectura);
        printf("\n");
        if (lectura == 1){
-           
+           juego(personajes);
        }
     }while(lectura != 0);
    
    
    printf("Huyes despavorido de tus labores.\n\n");
    printf("(Presiona cualquier tecla para salir...)");
-   //HACER ESO 
+   //HACER ESO
    return 0;
 }
 
@@ -159,6 +160,15 @@ void display_menu(){
     printf("Escriba la opcion que desee: ");
 }
 
+void juego(Map * personajes){
+    nacion *reino = (nacion*)malloc(sizeof(nacion));
+    reino->religion = 10;
+    reino->corrupcion = 10;
+    reino->economia = 10;
+    reino->felicidad = 10;
+    reino->religion = 10;
+}
+
 void mostrar_personajes(Map *personajes){
     
     NPC *ayuda = firstMap(personajes);
@@ -169,7 +179,7 @@ void mostrar_personajes(Map *personajes){
         printf("Peticion:\n%s\n", ayuda->peticion);
 
         printf("Opcion A: %s\n", ayuda->opcion_a);
-        printf("Consecuencias: ");
+        printf("Consecuencias: | ");
         for(int i = 0; i<5;i++){
             if(ayuda->consecuencia_a[i] != 0){
                 if(i == 0) printf("Economia: ");
@@ -184,7 +194,7 @@ void mostrar_personajes(Map *personajes){
 
         printf("\n");
         printf("Opcion B: %s\n", ayuda->opcion_b);
-        printf("Consecuencias: ");
+        printf("Consecuencias: | ");
         for(int i = 0; i<5;i++){
             if(ayuda->consecuencia_b[i] != 0){
                 if(i == 0) printf("Economia: ");
@@ -193,7 +203,7 @@ void mostrar_personajes(Map *personajes){
                 if(i == 3) printf("Felicidad: ");
                 if(i == 4) printf("Corrupcion: ");
                 if(ayuda->consecuencia_b[i] > 0) printf("+");
-                printf("%i / ", ayuda->consecuencia_b[i]);
+                printf("%i | ", ayuda->consecuencia_b[i]);
             }
         }
 
