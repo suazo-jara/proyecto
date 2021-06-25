@@ -25,15 +25,19 @@ typedef struct{
    int id;
    char nombre[30];
    char peticion[500];
-   char opcion_a[30];
-   char opcion_b[30];
+   char opcion_a[100];
+   char opcion_b[100];
    int consecuencia_a[5];
    int consecuencia_b[5];
 }NPC;
 
-//Funciones
+//Funciones principales
 void leer_archivo(Map*);
 void pasar_consecuencia(char *,NPC*, int);
+void display_menu();
+
+//Funciones auxiliares
+void mostrar_personajes(Map *);
 int is_equal_int(void *, void *);
 int is_equal_float(void *, void *);
 int lower_than_int(void *, void *);
@@ -42,30 +46,28 @@ int lower_than_float(void *, void *);
 int main(){
    Map *personajes = createMap(is_equal_int);
    setSortFunction(personajes,lower_than_int);
+   int lectura;
 
    leer_archivo(personajes);
-   //MOSTRAR PERSONAJES
-   /*
-   NPC *ayuda = firstMap(personajes);
-   while (ayuda)
-   {
-       printf("id:%i  nombre:%s peticion:%s opcion_a:%s opcion_b:%s \n", ayuda->id, ayuda->nombre, ayuda->peticion,ayuda->opcion_a,ayuda->opcion_b);
-       printf("consecuencia_a:");
-       for(int i = 0; i<5;i++){
-           printf("%i ", ayuda->consecuencia_a[i]);
-       }
-       printf("consecuencia_b:");
-       for(int i = 0; i<5;i++){
-           printf("%i ", ayuda->consecuencia_b[i]);
-       }
-       printf("\n");
-       printf("\n");
+   //mostrar_personajes(personajes);
 
-       ayuda = nextMap(personajes);
-   }
-   */
+   printf("\nEl anterior lord regente del reino de La Embarrada acaba de huir de sus labores.\n");
+   printf("Cuando pasabas cerca del castillo, te entrega toda su autoridad.\n");
+   printf("Te dispones a realizar tu labor como Soberano de La Embarrada.\n\n");
    
-   printf("fin");
+   do{
+       display_menu();
+       scanf("%d", &lectura);
+       printf("\n");
+       if (lectura == 1){
+           
+       }
+    }while(lectura != 0);
+   
+   
+   printf("Huyes despavorido de tus labores.\n\n");
+   printf("(Presiona cualquier tecla para salir...)");
+   //HACER ESO 
    return 0;
 }
 
@@ -147,6 +149,57 @@ void pasar_consecuencia(char *lectura,NPC *npc, int cantidad){
             }
             cont++;
         }
+    }
+}
+
+void display_menu(){
+    printf("1. Iniciar partida\n");
+    printf("0. Salir del juego\n");
+    printf("\n");
+    printf("Escriba la opcion que desee: ");
+}
+
+void mostrar_personajes(Map *personajes){
+    
+    NPC *ayuda = firstMap(personajes);
+    while (ayuda)
+    {
+        printf("ID: %i\n", ayuda->id);
+        printf("Nombre: %s\n", ayuda->nombre);
+        printf("Peticion:\n%s\n", ayuda->peticion);
+
+        printf("Opcion A: %s\n", ayuda->opcion_a);
+        printf("Consecuencias: ");
+        for(int i = 0; i<5;i++){
+            if(ayuda->consecuencia_a[i] != 0){
+                if(i == 0) printf("Economia: ");
+                if(i == 1) printf("Religion: ");
+                if(i == 2) printf("Defensa: ");
+                if(i == 3) printf("Felicidad: ");
+                if(i == 4) printf("Corrupcion: ");
+                if(ayuda->consecuencia_a[i] > 0) printf("+");
+                printf("%i | ", ayuda->consecuencia_a[i]);
+            }
+        }
+
+        printf("\n");
+        printf("Opcion B: %s\n", ayuda->opcion_b);
+        printf("Consecuencias: ");
+        for(int i = 0; i<5;i++){
+            if(ayuda->consecuencia_b[i] != 0){
+                if(i == 0) printf("Economia: ");
+                if(i == 1) printf("Religion: ");
+                if(i == 2) printf("Defensa: ");
+                if(i == 3) printf("Felicidad: ");
+                if(i == 4) printf("Corrupcion: ");
+                if(ayuda->consecuencia_b[i] > 0) printf("+");
+                printf("%i / ", ayuda->consecuencia_b[i]);
+            }
+        }
+
+        printf("\n");
+        printf("\n");
+        ayuda = nextMap(personajes);
     }
 }
 
