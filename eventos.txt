@@ -1,0 +1,1 @@
+id%nombre_evento%situacion%opcion A%opcion B%consecuencia A%consecuencia B
