@@ -1,5 +1,3 @@
-id,nombre,petición,opción A, opción B, consecuencia A, consecuencia B
-
-(Las consecuencias se guardan en un arreglo)
-
-1,Consejero real,"Su Excelencia, ¿quiere un soborno?","¡Guardias!","Me parece...","0 0 -1 0 +1","0 0 +1 0 -1"%
+id%nombre%peticion%opcion A%opcion B%consecuencia A%consecuencia B
+1%Consejero real%"Su Excelencia, quiere un soborno?"%"Guardias!"%"Me parece..."%"1 0 -1 0 -1"%"0 0 1 0 -1"
+2%holaaaaaa  % "que pasa, "% "yaa"%"noo"%"1 1 0 1 1"%"-1 -1 -1 -1 -1"
