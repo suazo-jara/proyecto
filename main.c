@@ -6,6 +6,7 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
+#include <conio.h>
 #include "list.h"
 #include "Map.h"
 
@@ -38,37 +39,46 @@ void display_menu();
 void juego(Map *);
 
 //Funciones auxiliares
+void leer_tecla();
 void mostrar_personajes(Map *);
 int is_equal_int(void *, void *);
 int is_equal_float(void *, void *);
 int lower_than_int(void *, void *);
 int lower_than_float(void *, void *);
 
+//Variable global
+int lectura;
 int main(){
    Map *personajes = createMap(is_equal_int);
    setSortFunction(personajes,lower_than_int);
-   int lectura;
+   
 
    leer_archivo(personajes);
-   //mostrar_personajes(personajes);
+   mostrar_personajes(personajes);
 
    printf("\nEl anterior lord regente del reino de La Embarrada acaba de huir de sus labores.\n");
    printf("Cuando pasabas cerca del castillo, te entrega toda su autoridad.\n");
    printf("Te dispones a realizar tu labor como Soberano de La Embarrada.\n\n");
+   printf("\n\n precione cualquier tecla para continuar ->");
    
-   do{
+   while(!kbhit()){ //loop infinito sin hacer nada hasta que se precione una tecla
+   }
+   system("cls");//limpia terminal
+   lectura=3;
+   while(lectura != 0){
        display_menu();
-       scanf("%d", &lectura);
-       printf("\n");
+       leer_tecla();
        if (lectura == 1){
            juego(personajes);
        }
-    }while(lectura != 0);
+    }
    
    
    printf("Huyes despavorido de tus labores.\n\n");
    printf("(Presiona cualquier tecla para salir...)");
-   //HACER ESO
+   while(!kbhit()){
+   }
+   system("cls");
    return 0;
 }
 
@@ -211,6 +221,61 @@ void mostrar_personajes(Map *personajes){
         printf("\n");
         ayuda = nextMap(personajes);
     }
+}
+
+void leer_tecla()
+{
+    int valido = 0;
+    char letra;
+    while (valido == 0)
+    {
+        if (kbhit())
+        {
+            letra = getch();
+            switch (letra)
+            {
+            case 27: //escape
+                lectura = 27;
+                valido++;
+                break;
+            case 48: //0
+                lectura = 0;
+                valido++;
+                break;
+            case 65: //A
+                lectura = 0;
+                valido++;
+                break;
+             case 97: //a
+                lectura = 0;
+                valido++;
+                break;
+            case 75: //flecha de izquierda
+                lectura = 0;
+                valido++;
+                break;
+            case 49: //1
+                lectura = 1;
+                valido++;
+                break;
+            case 66: //B
+                lectura = 1;
+                valido++;
+             case 98: //b
+                lectura = 1;
+                valido++;
+                break;
+            case 77: //flecha derecha
+                lectura = 1;
+                valido++;
+                break;
+
+            default:
+                break;
+            }
+        }
+    }
+    system("cls");
 }
 
 //Función para comparar claves de tipo int. Retorna 1 si son iguales
