@@ -38,6 +38,7 @@ void pasar_consecuencia(char *,NPC*, int);
 void display_menu();
 void juego(Map *,int*,int*,int, nacion*);
 int dado_personajes(Map *, int *,int);
+int finales(nacion *);
 
 //Funciones auxiliares
 void mostrar_nacion(nacion*);
@@ -55,7 +56,6 @@ int lectura;
 int main(){
    Map *personajes = createMap(is_equal_int);
    setSortFunction(personajes,lower_than_int);
-
    nacion *reino = (nacion*)malloc(sizeof(nacion));
     reino->religion = 10;
     reino->corrupcion = 10;
@@ -74,7 +74,7 @@ int main(){
    printf("\nEl anterior lord regente del reino de La Embarrada acaba de huir de sus labores.\n");
    printf("Cuando pasabas cerca del castillo, te entrega toda su autoridad.\n");
    printf("Te dispones a realizar tu labor como Soberano de La Embarrada.\n\n");
-   printf("\n\n precione cualquier tecla para continuar ->");
+   printf("\n\n presione cualquier tecla para continuar ->");
    
    while(!kbhit()){ //loop infinito sin hacer nada hasta que se precione una tecla
    }
@@ -90,6 +90,10 @@ int main(){
                //Juego
                juego(personajes,array_personaje,array_eventos,cantidad, reino);
                cont++; 
+
+               if(finales(reino)==1){ 
+                return 0;}
+
                system("cls"); 
            }
            if(cont == cantidad){
@@ -229,6 +233,20 @@ void juego(Map * personajes, int *array_personajes, int *array_eventos, int cant
     cambiar_nacion(iterador, lectura, reino);
     
 
+}
+
+int finales(nacion *reino){  //Hay que ver los eventos
+
+    if(reino->corrupcion>19){ printf("\n El descontento de la gente cobrará"); return 1;} 
+    if(reino->economia<1) {printf("\nt moriste de pobre");return 1; }
+    if(reino->religion>19) {printf("\nt moriste  jadslfk");return 1; }
+    if(reino->religion<1) {printf("\nt moriste de ateo");return 1; }
+    if(reino->defensa<1) {printf("\n Las defensas del reino han decaido al máximo");return 1; }
+    if(reino->felicidad<1) {printf("\nt moriste");return 1; }
+
+
+
+    return 0;
 }
 
 void mostrar_nacion(nacion *reino){
