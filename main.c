@@ -55,35 +55,42 @@ int main()
 {
     Map *personajes = createMap(is_equal_int);
     setSortFunction(personajes, lower_than_int);
-    nacion *reino = (nacion *)malloc(sizeof(nacion));
-    reino->religion = 10;
-    reino->corrupcion = 10;
-    reino->economia = 10;
-    reino->felicidad = 10;
-    reino->defensa = 10;
+    nacion *reino;
 
-    int cont = 0;
-    int cantidad = 2;
-    int array_personaje[2] = {};
-    int array_eventos[2] = {};
+    int cont;
+    int cantidad = 6; //Cantidad de personajes
+    int array_personaje[6];
+    int array_eventos[6];
 
     leer_archivo(personajes);
     //mostrar_personajes(personajes);
 
     int lectura = 3;
-    while (lectura != 27)
+    while (lectura != 0)
     {
         display_menu();
         lectura = leer_tecla();
         if (lectura == 1)
         {
+            cont = 0;
+            for (int i = 0; i < cantidad; i++){
+                array_personaje[i] = 0;
+                array_eventos[i] = 0;
+            }
+            reino = (nacion *)malloc(sizeof(nacion));
+            reino->religion = 10;
+            reino->corrupcion = 10;
+            reino->economia = 10;
+            reino->felicidad = 10;
+            reino->defensa = 10;
+
             printf("El anterior lord regente del reino de La Embarrada acaba de huir de sus labores.\n");
             printf("Cuando pasabas cerca del castillo, te entrega toda su autoridad...\n");
             printf("%cLarga vida al nuevo Soberano de La Embarrada!\n\n", 33);
             printf("(Presiona cualquier tecla para comenzar...)");
 
             limpiar_consola();
-            while (cont < cantidad && lectura != 27)
+            while (cont < cantidad)
             {
                 //Mostrar cualidades nacion
                 mostrar_nacion(reino);
@@ -93,6 +100,7 @@ int main()
 
                 if (finales(reino) == 1)
                 {
+                    printf("(Presiona cualquier tecla para salir...)");
                     limpiar_consola();
                     break;
                 }
@@ -259,32 +267,32 @@ int finales(nacion *reino)
 
     if (reino->corrupcion > 19)
     {
-        printf("\nEl Senado envenena tu comida para hacerse con el poder de La Embarrada.");
+        printf("El Senado envenena tu comida para hacerse con el poder de La Embarrada.\n\n");
         return 1;
     }
     if (reino->economia < 1)
     {
-        printf("\nLa pobre administración del Tesoro sume a La Embarrada en una fatal hambruna.");
+        printf("La pobre administracion del Tesoro sume a La Embarrada en una fatal hambruna.\n\n");
         return 1;
     }
     if (reino->religion > 19)
     {
-        printf("\nLa influencia del Culto eclipsa al poder de la Corona.");
+        printf("La influencia del Culto eclipsa al poder de la Corona.\n\n");
         return 1;
     }
     if (reino->religion < 1)
     {
-        printf("\nEl Grande castiga a los herejes por su falta de fe inundando La Embarrada y destruy%endola completamente.", 130);
+        printf("El Grande castiga a los herejes por su falta de fe inundando La Embarrada y destruy%endola completamente.\n\n", 130);
         return 1;
     }
     if (reino->defensa < 1)
     {
-        printf("\nAl enterarse de la deficiente defensa de La Embarrada, el reino vecino invade tu territorio.");
+        printf("Al enterarse de la deficiente defensa de La Embarrada, el reino vecino invade tu territorio.\n\n");
         return 1;
     }
     if (reino->felicidad < 1)
     {
-        printf("\nUna turba furiosa entra al castillo y te lincha.");
+        printf("Una turba furiosa entra al castillo y te lincha.\n\n");
         return 1;
     }
     return 0;
