@@ -6,42 +6,45 @@
 #include <math.h>
 #include <time.h>
 #include <conio.h>
-#include "list.h"
 #include "Map.h"
 
 //Estructuras
 
-//Tipo Nación
+//Tipo nación
 typedef struct
 {
-    int economia;   //0
-    int religion;   //1
-    int defensa;    //2
-    int felicidad;  //3
-    int corrupcion; //4
+    int economia;   //Factor 0
+    int religion;   //Factor 1
+    int defensa;    //Factor 2
+    int felicidad;  //Factor 3
+    int corrupcion; //Factor 4
 } nacion;
 
 //Tipo NPC
 typedef struct
 {
-    int id;
-    char nombre[30];
-    char peticion[500];
-    char opcion_a[100];
-    char opcion_b[100];
-    int consecuencia_a[5];
-    int consecuencia_b[5];
+    int id; //Número identificador del personaje
+    char nombre[30]; //Nombre del personaje
+    char peticion[500]; //Petición del personaje
+    char opcion_a[100]; //Opción A de la interacción
+    char opcion_b[100]; //Opción B de la interacción
+    int consecuencia_a[5]; //Consecuencia de la opción A
+    int consecuencia_b[5]; //Consecuencia de la opción B
 } NPC;
 
 //Funciones principales
+
 void leer_archivo(Map *);
 void pasar_consecuencia(char *, NPC *, int);
 void display_menu();
 void juego(Map *, int *, int *, int, nacion *, int *);
 int dado_personajes(Map *, int *, int);
 int finales(nacion *);
+int dado_evento(int *, int *, int);
+void finales_eventos(int);
 
 //Funciones auxiliares
+
 void limpiar_consola();
 void mostrar_nacion(nacion *);
 void mostrar_consecuencias(NPC *, int);
@@ -58,10 +61,11 @@ int main()
     setSortFunction(personajes, lower_than_int);
     nacion *reino;
 
-    int cont;
-    int cantidad = 6; //Cantidad de personajes
-    int array_personaje[6];
-    int array_eventos[6];
+    int cont; //Contador de interacciones que lleva el jugador
+    int cantidad = 7; //Cantidad de personajes
+    int array_personaje[cantidad]; //Arreglo para bloquear las interacciones ya ocurridas
+    int array_eventos[cantidad]; //Arreglo para bloquear las interacciones ya ocurridas
+    int llave_evento;
     leer_archivo(personajes);
     //mostrar_personajes(personajes);
 
@@ -72,6 +76,7 @@ int main()
         lectura = leer_tecla();
         if (lectura == 1)
         {
+            //Se inicializan las variables de juego para una nueva partida
             cont = 0;
             for (int i = 0; i < cantidad; i++)
             {
@@ -89,8 +94,9 @@ int main()
             printf("Cuando pasabas cerca del castillo, te entrega toda su autoridad...\n");
             printf("%cLarga vida al nuevo Soberano de La Embarrada!\n\n", 33);
             printf("(Presiona cualquier tecla para comenzar...)");
-
             limpiar_consola();
+
+            //Iteración donde ocurre el juego
             while (cont < cantidad && lectura!=27 && lectura!=32)
             {
                 //Mostrar cualidades nacion
@@ -100,22 +106,32 @@ int main()
                 cont++;
                 if (lectura == 32)
                 {
-                    printf("Asignas al primer pobre diablo que se te cruza como el soberano y huyes despavorido de tus labores.\n\n");
+                    printf("Asignas al primer pobre diablo que se te cruza como Soberano y huyes despavorido de tus labores.\n\n");
                     printf("(Presiona cualquier tecla para salir...)");
                     limpiar_consola();
                     break;
                 }
 
+                //En cada iteración se verifica el estado de los 5 factores. En el caso que corresponda, puede saltar el final malo
                 if (finales(reino) == 1)
                 {
                     printf("(Presiona cualquier tecla para salir...)");
                     limpiar_consola();
                     break;
                 }
+                
+                llave_evento = dado_evento(array_eventos, array_personaje, cantidad);
+                if (llave_evento != 0){
+                    finales_eventos(llave_evento);
+                    printf("(Presiona cualquier tecla para salir...)");
+                    limpiar_consola();
+                    break;
+                }
             }
-            if (cont == cantidad)
+            //Si el usuario finaliza todas las interacciones, salta el final bueno
+            if (cont == cantidad && llave_evento == 0)
             {
-                printf("Tu juicio logra mantener el reino. La Embarrada prospera hasta el d%ca de tu muerte.\nFIN.\n\n", 161);
+                printf("Tu juicio logra mantener el reino. La Embarrada prospera hasta el d%ca de tu muerte.\n\nFIN.\n\n", 161);
                 printf("(Presiona cualquier tecla para volver al men%c principal...)", 163);
                 limpiar_consola();
             }
@@ -124,6 +140,7 @@ int main()
     return 0;
 }
 
+//Función que lee el archivo "personajes.txt"
 void leer_archivo(Map *personajes)
 {
     int cont = 0;
@@ -188,6 +205,7 @@ void leer_archivo(Map *personajes)
     }
 }
 
+//Función que pasa la consecuencia de la lectura al arreglo de la estructura NPC
 void pasar_consecuencia(char *lectura, NPC *npc, int cantidad)
 {
     int cont = 0;
@@ -226,6 +244,7 @@ void pasar_consecuencia(char *lectura, NPC *npc, int cantidad)
     }
 }
 
+//Función que muestra el menu principal
 void display_menu()
 {
     printf("1.   Iniciar partida\n");
@@ -234,6 +253,7 @@ void display_menu()
     printf("Escriba la opcion que desee: ");
 }
 
+//Función en la que se muestran las interacciones
 void juego(Map *personajes, int *array_personajes, int *array_eventos, int cantidad, nacion *reino, int *lectura)
 {
 
@@ -257,56 +277,80 @@ void juego(Map *personajes, int *array_personajes, int *array_eventos, int canti
     opcion = 1;
     printf("1. %s \n", iterador->opcion_b);
     mostrar_consecuencias(iterador, opcion);
-    //Opcion Espacio Huir
-    printf("Precione espacio si quiere huir\n ");
     //Seleccionar opcion
     printf("%cQu%c desea la voluntad de Su Alteza?\n\n", 168, 130);
+    //Opcion Espacio Huir
+    printf("(Presione espacio para huir de sus labores...)\n");
     *lectura = leer_tecla();
     modificar_nacion(iterador, *lectura, reino);
 }
 
+//Función que verifica los factores para determinar si se satisface la condición de un final malo
 int finales(nacion *reino)
-{ //Hay que ver los eventos
-
+{
     if (reino->corrupcion > 19)
     {
-        printf("El Senado envenena tu comida para hacerse con el poder de La Embarrada.\n\n");
+        printf("El Senado envenena tu comida para hacerse con el poder de La Embarrada.\n\nFIN.\n\n");
         return 1;
     }
     if (reino->economia < 1)
     {
-        printf("La pobre administracion del Tesoro sume a La Embarrada en una fatal hambruna.\n\n");
+        printf("La pobre administracion del Tesoro sume a La Embarrada en una fatal hambruna.\n\nFIN.\n\n");
         return 1;
     }
     if (reino->religion > 19)
     {
-        printf("La influencia del Culto eclipsa al poder de la Corona.\n\n");
+        printf("La influencia del Culto eclipsa al poder de la Corona.\n\nFIN.\n\n");
         return 1;
     }
     if (reino->religion < 1)
     {
-        printf("El Grande castiga a los herejes por su falta de fe inundando La Embarrada y destruy%endola completamente.\n\n", 130);
+        printf("El Grande castiga a los herejes por su falta de fe inundando La Embarrada y destruy%endola completamente.\n\nFIN.\n\n", 130);
         return 1;
     }
     if (reino->defensa < 1)
     {
-        printf("Al enterarse de la deficiente defensa de La Embarrada, el reino vecino invade tu territorio.\n\n");
+        printf("Al enterarse de la deficiente defensa de La Embarrada, el reino vecino invade tu territorio.\n\nFIN.\n\n");
         return 1;
     }
     if (reino->felicidad < 1)
     {
-        printf("Una turba furiosa entra al castillo y te lincha.\n\n");
+        printf("Una turba furiosa entra al castillo y te lincha.\n\nFIN.\n\n");
         return 1;
     }
     return 0;
 }
 
+//Función que retorna la clave relacionada a un evento. Si el evento existe, se retorna el índice relacionado a este, sino, retorna 0
+int dado_evento(int *array_eventos, int *array_personajes, int cantidad){
+    
+    srand(time(NULL));
+    int numero = rand() % cantidad;
+    
+    if (array_personajes[numero] == 1){
+        if (numero == 6){
+            return numero;
+        }
+    }
+    return 0;
+}
+
+//Función que muestra el final del evento relacionado a la llave que le corresponda
+void finales_eventos(int llave_evento){
+    if (llave_evento == 6){
+        printf("La poblaci%cn de La Embarrada muere ante la llegada de la peste negra.\n\nFIN.\n\n", 162);
+        return;
+    }
+}
+
+//Función que muestra el valor actual de los factores del reino
 void mostrar_nacion(nacion *reino)
 {
     printf("                           ESTADO DE LA EMBARRADA\n");
     printf("| Corrupcion: %i | Defensa: %i | Economia: %i | Felicidad: %i | Religion: %i |\n\n", reino->corrupcion, reino->defensa, reino->economia, reino->felicidad, reino->religion);
 }
 
+//Función que llama por ID a un personaje aleatorio con el que el jugador aún no ha interactuado
 int dado_personajes(Map *personajes, int *array_personajes, int cantidad)
 {
     srand(time(NULL));
@@ -324,6 +368,7 @@ int dado_personajes(Map *personajes, int *array_personajes, int cantidad)
     }
 }
 
+//Función debug para mostrar a los personajes leídos. Usar solo para verificar que "personajes.txt" ha sido leído correctamente.
 void mostrar_personajes(Map *personajes)
 {
 
@@ -385,6 +430,7 @@ void mostrar_personajes(Map *personajes)
     }
 }
 
+//Función que muestra las consecuencias de cada opción por interacción
 void mostrar_consecuencias(NPC *iterador, int opcion)
 {
 
@@ -440,6 +486,7 @@ void mostrar_consecuencias(NPC *iterador, int opcion)
     }
 }
 
+//Función que modifica los factores del reino según las consecuencias de la opción elegida por el usuario
 void modificar_nacion(NPC *iterador, int lectura, nacion *reino)
 {
     int cambio;
@@ -486,6 +533,7 @@ void modificar_nacion(NPC *iterador, int lectura, nacion *reino)
     }
 }
 
+//Función que lee la tecla ingresada por el usuario
 int leer_tecla()
 {
     int valido = 0;
@@ -546,6 +594,7 @@ int leer_tecla()
     system("cls");
     return lectura;
 }
+
 //Función que limpia la consola cuando se presione una tecla
 void limpiar_consola()
 {
@@ -554,6 +603,7 @@ void limpiar_consola()
     }
     system("cls");
 }
+
 //Función para comparar claves de tipo int. Retorna 1 si son iguales
 int is_equal_int(void *key1, void *key2)
 {
