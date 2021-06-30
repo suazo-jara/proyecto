@@ -40,8 +40,9 @@ void display_menu();
 void juego(Map *, int *, int *, int, nacion *, int *);
 int dado_personajes(Map *, int *, int);
 int finales(nacion *);
-int dado_evento(int *, int *, int);
+int dado_evento(int *, int);
 void finales_eventos(int);
+void eventos(int*, int, int);
 
 //Funciones auxiliares
 
@@ -120,7 +121,7 @@ int main()
                     break;
                 }
                 
-                llave_evento = dado_evento(array_eventos, array_personaje, cantidad);
+                llave_evento = dado_evento(array_eventos, cantidad);
                 if (llave_evento != 0){
                     finales_eventos(llave_evento);
                     printf("(Presiona cualquier tecla para salir...)");
@@ -283,8 +284,18 @@ void juego(Map *personajes, int *array_personajes, int *array_eventos, int canti
     printf("(Presione espacio para huir de sus labores...)\n");
     *lectura = leer_tecla();
     modificar_nacion(iterador, *lectura, reino);
+    //Modificar array de eventos
+    eventos(array_eventos,*lectura, numero);
 }
 
+//Se desbloquean los eventos dependiendo de la opcion que el usuario escoja
+void eventos(int *array_eventos, int lectura, int numero){
+    if(numero == 6){
+        if(lectura == 1){
+            array_eventos[numero] = 1;
+        }
+    }
+}
 //Función que verifica los factores para determinar si se satisface la condición de un final malo
 int finales(nacion *reino)
 {
@@ -322,12 +333,12 @@ int finales(nacion *reino)
 }
 
 //Función que retorna la clave relacionada a un evento. Si el evento existe, se retorna el índice relacionado a este, sino, retorna 0
-int dado_evento(int *array_eventos, int *array_personajes, int cantidad){
+int dado_evento(int *array_eventos, int cantidad){
     
     srand(time(NULL));
     int numero = rand() % cantidad;
     
-    if (array_personajes[numero] == 1){
+    if (array_eventos[numero] == 1){
         if (numero == 6){
             return numero;
         }
