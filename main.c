@@ -53,7 +53,7 @@ int lower_than_int(void *, void *);
 
 int main()
 {
-printf("entro al main\n");
+
     Map *personajes = createMap(is_equal_int);
     setSortFunction(personajes, lower_than_int);
     nacion *reino;
@@ -62,9 +62,7 @@ printf("entro al main\n");
     int cantidad = 6; //Cantidad de personajes
     int array_personaje[6];
     int array_eventos[6];
-    printf("pre leer archivos\n");
     leer_archivo(personajes);
-    printf("post leer archivos\n");
     //mostrar_personajes(personajes);
 
     int lectura = 3;
