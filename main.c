@@ -53,6 +53,7 @@ int lower_than_int(void *, void *);
 
 int main()
 {
+printf("entro al main\n");
     Map *personajes = createMap(is_equal_int);
     setSortFunction(personajes, lower_than_int);
     nacion *reino;
@@ -61,19 +62,21 @@ int main()
     int cantidad = 6; //Cantidad de personajes
     int array_personaje[6];
     int array_eventos[6];
-
+    printf("pre leer archivos\n");
     leer_archivo(personajes);
+    printf("post leer archivos\n");
     //mostrar_personajes(personajes);
 
     int lectura = 3;
-    while (lectura != 0)
+    while (lectura != 27)
     {
         display_menu();
         lectura = leer_tecla();
         if (lectura == 1)
         {
             cont = 0;
-            for (int i = 0; i < cantidad; i++){
+            for (int i = 0; i < cantidad; i++)
+            {
                 array_personaje[i] = 0;
                 array_eventos[i] = 0;
             }
@@ -90,13 +93,20 @@ int main()
             printf("(Presiona cualquier tecla para comenzar...)");
 
             limpiar_consola();
-            while (cont < cantidad)
+            while (cont < cantidad && lectura!=27 && lectura!=32)
             {
                 //Mostrar cualidades nacion
                 mostrar_nacion(reino);
                 //Juego
                 juego(personajes, array_personaje, array_eventos, cantidad, reino, &lectura);
                 cont++;
+                if (lectura == 32)
+                {
+                    printf("Asignas al primer pobre diablo que se te cruza como el soberano y huyes despavorido de tus labores.\n\n");
+                    printf("(Presiona cualquier tecla para salir...)");
+                    limpiar_consola();
+                    break;
+                }
 
                 if (finales(reino) == 1)
                 {
@@ -111,12 +121,6 @@ int main()
                 printf("(Presiona cualquier tecla para volver al men%c principal...)", 163);
                 limpiar_consola();
             }
-        }
-        if (lectura == 0)
-        {
-            printf("Huyes despavorido de tus labores.\n\n");
-            printf("(Presiona cualquier tecla para salir...)");
-            limpiar_consola();
         }
     }
     return 0;
@@ -226,8 +230,8 @@ void pasar_consecuencia(char *lectura, NPC *npc, int cantidad)
 
 void display_menu()
 {
-    printf("1. Iniciar partida\n");
-    printf("0. Salir del juego\n");
+    printf("1.   Iniciar partida\n");
+    printf("Esc. Salir del juego\n");
     printf("\n");
     printf("Escriba la opcion que desee: ");
 }
@@ -255,7 +259,8 @@ void juego(Map *personajes, int *array_personajes, int *array_eventos, int canti
     opcion = 1;
     printf("1. %s \n", iterador->opcion_b);
     mostrar_consecuencias(iterador, opcion);
-
+    //Opcion Espacio Huir
+    printf("Precione espacio si quiere huir\n ");
     //Seleccionar opcion
     printf("%cQu%c desea la voluntad de Su Alteza?\n\n", 168, 130);
     *lectura = leer_tecla();
@@ -497,6 +502,10 @@ int leer_tecla()
             {
             case 27: //escape
                 lectura = 27;
+                valido++;
+                break;
+                case 32: //Espacio
+                lectura = 32;
                 valido++;
                 break;
             case 48: //0
