@@ -63,7 +63,7 @@ int main()
     nacion *reino;
 
     int cont; //Contador de interacciones que lleva el jugador
-    int cantidad = 7; //Cantidad de personajes
+    int cantidad = 10; //Cantidad de personajes
     int array_personaje[cantidad]; //Arreglo para bloquear las interacciones ya ocurridas
     int array_eventos[cantidad]; //Arreglo para bloquear las interacciones ya ocurridas
     int llave_evento;

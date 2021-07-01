@@ -6,3 +6,6 @@ id%nombre%peticion%opcion A%opcion B%consecuencia A%consecuencia B
 4%Lider del gremio%"Su Excelencia, acepte esta prueba de mi gratitud."%"No acepto sobornos"%"No me viene mal..."%"-5 0 0 0 -5"%"5 0 0 0 3"
 5%Verdugo%"Hay demasiados condenados a muerte."%"El ejercito te ayudara"%"Liberen a los ancianos"%"0 0 -5 -1 0"%"-5 0 0 -7 0"
 6%Doctor%"Su Excelencia, hay que invertir en la investigación de la peste."%"Las arcas del reino estan a su disposicion"%"No nos encontramos en condiciones"%"-9 0 0 0 0"%"0 0 0 0 0"
+7%Pueblerino%"Su Excelencia, nuestra gente se siente muy insegura en las calles, ayudenos."%"Me encargare de aumentar la seguridad"%"No estamos en condiciones de mejoras"%"-3 0 2 2 0"%"0 0 -1 -2 0" 
+8%Vendedor misterioso%"Tengo un producto que podria ser de su interes, puede ayudar con varios mal estares a las personas de su reino..."%"Veremos si realmente sirve"%"Deberias tener pruebas aquello"%"-2 0 0 2 0"%"0 0 0 0 0" 
+9%Viajero del tiempo%"Senor, debe tomar medidas y evitar un golpe de corrupcion."%"Te hare caso, no me arriesgare"%"Retirate por favor..."%"0 0 0 1 -4"%"-1 0 0 -2 +4"
