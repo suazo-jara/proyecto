@@ -23,11 +23,11 @@ typedef struct
 //Tipo NPC
 typedef struct
 {
-    int id; //Número identificador del personaje
-    char nombre[30]; //Nombre del personaje
-    char peticion[500]; //Petición del personaje
-    char opcion_a[100]; //Opción A de la interacción
-    char opcion_b[100]; //Opción B de la interacción
+    int id;                //Número identificador del personaje
+    char nombre[30];       //Nombre del personaje
+    char peticion[500];    //Petición del personaje
+    char opcion_a[100];    //Opción A de la interacción
+    char opcion_b[100];    //Opción B de la interacción
     int consecuencia_a[5]; //Consecuencia de la opción A
     int consecuencia_b[5]; //Consecuencia de la opción B
 } NPC;
@@ -42,7 +42,7 @@ int dado_personajes(Map *, int *, int);
 int finales(nacion *);
 int dado_evento(int *, int);
 void finales_eventos(int);
-void eventos(int*, int, int);
+void eventos(int *, int, int);
 
 //Funciones auxiliares
 
@@ -62,10 +62,10 @@ int main()
     setSortFunction(personajes, lower_than_int);
     nacion *reino;
 
-    int cont; //Contador de interacciones que lleva el jugador
-    int cantidad = 10; //Cantidad de personajes
+    int cont;                      //Contador de interacciones que lleva el jugador
+    int cantidad = 10;             //Cantidad de personajes
     int array_personaje[cantidad]; //Arreglo para bloquear las interacciones ya ocurridas
-    int array_eventos[cantidad]; //Arreglo para bloquear las interacciones ya ocurridas
+    int array_eventos[cantidad];   //Arreglo para bloquear las interacciones ya ocurridas
     int llave_evento;
     leer_archivo(personajes);
     //mostrar_personajes(personajes);
@@ -98,7 +98,7 @@ int main()
             limpiar_consola();
 
             //Iteración donde ocurre el juego
-            while (cont < cantidad && lectura!=27 && lectura!=32)
+            while (cont < cantidad && lectura != 27 && lectura != 32)
             {
                 //Mostrar cualidades nacion
                 mostrar_nacion(reino);
@@ -120,9 +120,10 @@ int main()
                     limpiar_consola();
                     break;
                 }
-                
+
                 llave_evento = dado_evento(array_eventos, cantidad);
-                if (llave_evento != 0){
+                if (llave_evento != 0)
+                {
                     finales_eventos(llave_evento);
                     printf("(Presiona cualquier tecla para salir...)");
                     limpiar_consola();
@@ -149,7 +150,6 @@ void leer_archivo(Map *personajes)
     int id = 0;
     char *lectura = (char *)malloc(sizeof(char) * 1000);
     FILE *archivo = fopen("personajes.txt", "r");
-
     NPC *npc = (NPC *)malloc(sizeof(NPC));
 
     while (fscanf(archivo, "%[^%\n]s", lectura) != EOF)
@@ -285,13 +285,16 @@ void juego(Map *personajes, int *array_personajes, int *array_eventos, int canti
     *lectura = leer_tecla();
     modificar_nacion(iterador, *lectura, reino);
     //Modificar array de eventos
-    eventos(array_eventos,*lectura, numero);
+    eventos(array_eventos, *lectura, numero);
 }
 
 //Se desbloquean los eventos dependiendo de la opcion que el usuario escoja
-void eventos(int *array_eventos, int lectura, int numero){
-    if(numero == 6){
-        if(lectura == 1){
+void eventos(int *array_eventos, int lectura, int numero)
+{
+    if (numero == 6)
+    {
+        if (lectura == 1)
+        {
             array_eventos[numero] = 1;
         }
     }
@@ -333,13 +336,16 @@ int finales(nacion *reino)
 }
 
 //Función que retorna la clave relacionada a un evento. Si el evento existe, se retorna el índice relacionado a este, sino, retorna 0
-int dado_evento(int *array_eventos, int cantidad){
-    
+int dado_evento(int *array_eventos, int cantidad)
+{
+
     srand(time(NULL));
     int numero = rand() % cantidad;
-    
-    if (array_eventos[numero] == 1){
-        if (numero == 6){
+
+    if (array_eventos[numero] == 1)
+    {
+        if (numero == 6)
+        {
             return numero;
         }
     }
@@ -347,8 +353,10 @@ int dado_evento(int *array_eventos, int cantidad){
 }
 
 //Función que muestra el final del evento relacionado a la llave que le corresponda
-void finales_eventos(int llave_evento){
-    if (llave_evento == 6){
+void finales_eventos(int llave_evento)
+{
+    if (llave_evento == 6)
+    {
         printf("La poblaci%cn de La Embarrada muere ante la llegada de la peste negra.\n\nFIN.\n\n", 162);
         return;
     }
@@ -561,7 +569,7 @@ int leer_tecla()
                 lectura = 27;
                 valido++;
                 break;
-                case 32: //Espacio
+            case 32: //Espacio
                 lectura = 32;
                 valido++;
                 break;
@@ -609,8 +617,15 @@ int leer_tecla()
 //Función que limpia la consola cuando se presione una tecla
 void limpiar_consola()
 {
+    char letra = 'a';
+
     while (!kbhit())
-    { //loop infinito sin hacer nada hasta que se precione una tecla
+    {
+        while (letra != 13)
+        {
+            letra = getch();
+        }
+        break;
     }
     system("cls");
 }

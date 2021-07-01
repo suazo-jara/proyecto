@@ -25,6 +25,9 @@ Finales:
 - Todas las interacciones completas
 - Final para cada evento (si se elige la opción equivocada)
 
+Requisitos:
+Compilador MS-DOS(por la libreria conio.h)
+
 Integrantes:
 
 - Juan Araya Horta
