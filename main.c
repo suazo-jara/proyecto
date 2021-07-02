@@ -63,7 +63,7 @@ int main()
     nacion *reino;
 
     int cont;                      //Contador de interacciones que lleva el jugador
-    int cantidad = 10;             //Cantidad de personajes
+    int cantidad = 16;             //Cantidad de personajes
     int array_personaje[cantidad]; //Arreglo para bloquear las interacciones ya ocurridas
     int array_eventos[cantidad];   //Arreglo para bloquear las interacciones ya ocurridas
     int llave_evento;
@@ -94,7 +94,7 @@ int main()
             printf("El anterior lord regente del reino de La Embarrada acaba de huir de sus labores.\n");
             printf("Cuando pasabas cerca del castillo, te entrega toda su autoridad...\n");
             printf("%cLarga vida al nuevo Soberano de La Embarrada!\n\n", 33);
-            printf("(Presiona cualquier tecla para comenzar...)");
+            printf("(Presiona ENTER para comenzar...)");
             limpiar_consola();
 
             //Iteración donde ocurre el juego
@@ -108,7 +108,7 @@ int main()
                 if (lectura == 32)
                 {
                     printf("Asignas al primer pobre diablo que se te cruza como Soberano y huyes despavorido de tus labores.\n\n");
-                    printf("(Presiona cualquier tecla para salir...)");
+                    printf("(Presiona ENTER para salir...)");
                     limpiar_consola();
                     break;
                 }
@@ -116,7 +116,7 @@ int main()
                 //En cada iteración se verifica el estado de los 5 factores. En el caso que corresponda, puede saltar el final malo
                 if (finales(reino) == 1)
                 {
-                    printf("(Presiona cualquier tecla para salir...)");
+                    printf("(Presiona ENTER para salir...)");
                     limpiar_consola();
                     break;
                 }
@@ -125,7 +125,7 @@ int main()
                 if (llave_evento != 0)
                 {
                     finales_eventos(llave_evento);
-                    printf("(Presiona cualquier tecla para salir...)");
+                    printf("(Presiona ENTER para salir...)");
                     limpiar_consola();
                     break;
                 }
@@ -134,7 +134,7 @@ int main()
             if (cont == cantidad && llave_evento == 0)
             {
                 printf("Tu juicio logra mantener el reino. La Embarrada prospera hasta el d%ca de tu muerte.\n\nFIN.\n\n", 161);
-                printf("(Presiona cualquier tecla para volver al men%c principal...)", 163);
+                printf("(Presiona ENTER para volver al men%c principal...)", 163);
                 limpiar_consola();
             }
         }
@@ -248,10 +248,10 @@ void pasar_consecuencia(char *lectura, NPC *npc, int cantidad)
 //Función que muestra el menu principal
 void display_menu()
 {
-    printf("1.   Iniciar partida\n");
-    printf("Esc. Salir del juego\n");
+    printf("1.   INICIAR PARTIDA\n");
+    printf("ESC. SALIR DEL JUEGO\n");
     printf("\n");
-    printf("Escriba la opcion que desee: ");
+    printf("Escriba la opci%cn que desee: ", 162);
 }
 
 //Función en la que se muestran las interacciones
@@ -281,7 +281,7 @@ void juego(Map *personajes, int *array_personajes, int *array_eventos, int canti
     //Seleccionar opcion
     printf("%cQu%c desea la voluntad de Su Alteza?\n\n", 168, 130);
     //Opcion Espacio Huir
-    printf("(Presione espacio para huir de sus labores...)\n");
+    printf("(Presiona ESPACIO para huir de tus labores...)\n\n");
     *lectura = leer_tecla();
     modificar_nacion(iterador, *lectura, reino);
     //Modificar array de eventos
@@ -291,9 +291,17 @@ void juego(Map *personajes, int *array_personajes, int *array_eventos, int canti
 //Se desbloquean los eventos dependiendo de la opcion que el usuario escoja
 void eventos(int *array_eventos, int lectura, int numero)
 {
-    if (numero == 6)
+    if (numero == 6 || numero == 9)
     {
         if (lectura == 1)
+        {
+            array_eventos[numero] = 1;
+        }
+    }
+
+    if (numero == 12)
+    {
+        if (lectura == 0)
         {
             array_eventos[numero] = 1;
         }
@@ -344,7 +352,7 @@ int dado_evento(int *array_eventos, int cantidad)
 
     if (array_eventos[numero] == 1)
     {
-        if (numero == 6)
+        if (numero == 6 || numero == 9 || numero == 12)
         {
             return numero;
         }
@@ -357,8 +365,16 @@ void finales_eventos(int llave_evento)
 {
     if (llave_evento == 6)
     {
-        printf("La poblaci%cn de La Embarrada muere ante la llegada de la peste negra.\n\nFIN.\n\n", 162);
+        printf("La poblaci%cn de La Embarrada sufre una cruel muerte ante la llegada de la peste negra.\n\nFIN.\n\n", 162);
         return;
+    }
+
+    if (llave_evento == 9){
+        printf("A v%csperas de sus 18 a%cos, tu hijo primigenio vierte veneno en tu boca mientras dorm%cas.\n\nFIN.\n\n", 161, 164, 161);
+    }
+
+    if (llave_evento == 12){
+        printf("Una explosi%cn proveniente de los aposentos del alquimista destruye el castillo contigo dentro.\n\nFIN.\n\n", 162);
     }
 }
 
@@ -366,7 +382,7 @@ void finales_eventos(int llave_evento)
 void mostrar_nacion(nacion *reino)
 {
     printf("                           ESTADO DE LA EMBARRADA\n");
-    printf("| Corrupcion: %i | Defensa: %i | Economia: %i | Felicidad: %i | Religion: %i |\n\n", reino->corrupcion, reino->defensa, reino->economia, reino->felicidad, reino->religion);
+    printf("| Corrupci%cn: %i | Defensa: %i | Econom%ca: %i | Felicidad: %i | Religi%cn: %i |\n\n", 162, reino->corrupcion, reino->defensa, 161, reino->economia, reino->felicidad, 162, reino->religion);
 }
 
 //Función que llama por ID a un personaje aleatorio con el que el jugador aún no ha interactuado
@@ -449,7 +465,7 @@ void mostrar_personajes(Map *personajes)
     }
 }
 
-//Función que muestra las consecuencias de cada opción por interacción
+//Función debug que muestra las consecuencias de cada opción por interacción
 void mostrar_consecuencias(NPC *iterador, int opcion)
 {
 
@@ -510,46 +526,34 @@ void modificar_nacion(NPC *iterador, int lectura, nacion *reino)
 {
     int cambio;
 
-    if (lectura == 0)
-    {
         for (int i = 0; i < 5; i++)
         {
-            if (iterador->consecuencia_a[i] != 0)
-            {
-                cambio = iterador->consecuencia_a[i];
+                if (lectura == 0) cambio = iterador->consecuencia_a[i];
+                else if (lectura == 1) cambio = iterador->consecuencia_b[i];
+
                 if (i == 0)
+                {
                     reino->economia += cambio;
+                    if (reino->economia > 20) reino->economia = 20;
+                }
                 if (i == 1)
                     reino->religion += cambio;
                 if (i == 2)
+                {
                     reino->defensa += cambio;
+                    if (reino->defensa > 20) reino->defensa = 20;
+                }
                 if (i == 3)
+                {
                     reino->felicidad += cambio;
+                    if (reino->felicidad > 20) reino->felicidad = 20;
+                }
                 if (i == 4)
+                {
                     reino->corrupcion += cambio;
-            }
+                    if (reino->corrupcion < 0) reino->corrupcion = 0;
+                }
         }
-    }
-    if (lectura == 1)
-    {
-        for (int i = 0; i < 5; i++)
-        {
-            if (iterador->consecuencia_b[i] != 0)
-            {
-                cambio = iterador->consecuencia_b[i];
-                if (i == 0)
-                    reino->economia += cambio;
-                if (i == 1)
-                    reino->religion += cambio;
-                if (i == 2)
-                    reino->defensa += cambio;
-                if (i == 3)
-                    reino->felicidad += cambio;
-                if (i == 4)
-                    reino->corrupcion += cambio;
-            }
-        }
-    }
 }
 
 //Función que lee la tecla ingresada por el usuario
