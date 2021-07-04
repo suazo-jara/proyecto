@@ -6,7 +6,7 @@
 int main(){
     int cambio,b;
     srand(time(NULL));
-    cambio=-5;
-    b=(cambio/abs(cambio))*(rand()%cambio+1);
+    cambio=-7;
+    b=((cambio)/abs(cambio))*(rand()%cambio+1);
     printf("%i",b);
 }
