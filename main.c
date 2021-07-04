@@ -560,24 +560,24 @@ void modificar_nacion(NPC *iterador, int lectura, nacion *reino)
 
                 if (i == 0)
                 {
-                    reino->economia += cambio;
+                    reino->economia += (cambio/abs(cambio))*(rand()%cambio+1);
                     if (reino->economia > 20) reino->economia = 20;
                 }
                 if (i == 1)
-                    reino->religion += cambio;
+                    reino->religion += (cambio/abs(cambio))*(rand()%cambio+1);
                 if (i == 2)
                 {
-                    reino->defensa += cambio;
+                    reino->defensa += (cambio/abs(cambio))*(rand()%cambio+1);
                     if (reino->defensa > 20) reino->defensa = 20;
                 }
                 if (i == 3)
                 {
-                    reino->felicidad += cambio;
+                    reino->felicidad += (cambio/abs(cambio))*(rand()%cambio+1);
                     if (reino->felicidad > 20) reino->felicidad = 20;
                 }
                 if (i == 4)
                 {
-                    reino->corrupcion += cambio;
+                    reino->corrupcion += (cambio/abs(cambio))*(rand()%cambio+1);
                     if (reino->corrupcion < 0) reino->corrupcion = 0;
                 }
         }
