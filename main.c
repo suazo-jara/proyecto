@@ -63,7 +63,7 @@ int main()
     nacion *reino;
 
     int cont;                      //Contador de interacciones que lleva el jugador
-    int cantidad = 16;             //Cantidad de personajes
+    int cantidad = 31;             //Cantidad de personajes
     int array_personaje[cantidad]; //Arreglo para bloquear las interacciones ya ocurridas
     int array_eventos[cantidad];   //Arreglo para bloquear las interacciones ya ocurridas
     int llave_evento;
@@ -91,9 +91,19 @@ int main()
             reino->felicidad = 10;
             reino->defensa = 10;
 
-            printf("El anterior lord regente del reino de La Embarrada acaba de huir de sus labores.\n");
-            printf("Cuando pasabas cerca del castillo, te entrega toda su autoridad...\n");
-            printf("%cLarga vida al nuevo Soberano de La Embarrada!\n\n", 33);
+            printf("%c", 218);
+            for (int i = 0; i < 84; i++){
+                printf("%c", 196);
+            }
+            printf("%c\n", 191);
+            printf("%c  El anterior lord regente del reino de La Embarrada acaba de huir de sus labores.  %c\n", 179, 179);
+            printf("%c         Cuando pasabas cerca del castillo, te entrega toda su autoridad...         %c\n", 179, 179);
+            printf("%c                 %c Larga vida al nuevo Soberano de La Embarrada !                   %c\n", 179, 33, 179);
+            printf("%c", 192);
+            for (int i = 0; i < 84; i++){
+                printf("%c", 196);
+            }
+            printf("%c\n\n", 217);
             printf("(Presiona ENTER para comenzar...)");
             limpiar_consola();
 
@@ -107,7 +117,7 @@ int main()
                 cont++;
                 if (lectura == 32)
                 {
-                    printf("Asignas al primer pobre diablo que se te cruza como Soberano y huyes despavorido de tus labores.\n\n");
+                    printf("Asignas al primer pobre diablo que se te cruza como Soberano de La Embarrada y huyes despavorido de tus labores.\n\n");
                     printf("(Presiona ENTER para salir...)");
                     limpiar_consola();
                     break;
@@ -248,10 +258,26 @@ void pasar_consecuencia(char *lectura, NPC *npc, int cantidad)
 //Función que muestra el menu principal
 void display_menu()
 {
-    printf("1.   INICIAR PARTIDA\n");
-    printf("ESC. SALIR DEL JUEGO\n");
+    printf("%c", 218);
+    for (int i = 0; i < 28; i++){
+        printf("%c", 196);
+    }
+    printf("%c\n", 191);
+    printf("%c  SOBERANO DE LA EMBARRADA  %c\n", 179, 179);
+    printf("%c", 195);
+    for (int i = 0; i < 28; i++){
+        printf("%c", 196);
+    }
+    printf("%c\n", 180);
+    printf("%c   1.    INICIAR PARTIDA    %c\n", 179, 179);
+    printf("%c   ESC.  SALIR DEL JUEGO    %c\n", 179, 179);
+    printf("%c", 192);
+    for (int i = 0; i < 28; i++){
+        printf("%c", 196);
+    }
+    printf("%c\n", 217);
     printf("\n");
-    printf("Escriba la opci%cn que desee: ", 162);
+    printf("Ingrese la opci%cn que desee: ", 162);
 }
 
 //Función en la que se muestran las interacciones
@@ -272,12 +298,12 @@ void juego(Map *personajes, int *array_personajes, int *array_eventos, int canti
     printf("%s:\n", iterador->nombre);
     printf("%s\n\n", iterador->peticion);
     //Opcion 0
-    printf("0. %s \n", iterador->opcion_a);
-    mostrar_consecuencias(iterador, opcion);
+    printf("0. %s \n\n", iterador->opcion_a);
+    //mostrar_consecuencias(iterador, opcion);
     //Opcion 1
     opcion = 1;
-    printf("1. %s \n", iterador->opcion_b);
-    mostrar_consecuencias(iterador, opcion);
+    printf("1. %s \n\n", iterador->opcion_b);
+    //mostrar_consecuencias(iterador, opcion);
     //Seleccionar opcion
     printf("%cQu%c desea la voluntad de Su Alteza?\n\n", 168, 130);
     //Opcion Espacio Huir
@@ -299,7 +325,7 @@ void eventos(int *array_eventos, int lectura, int numero)
         }
     }
 
-    if (numero == 12)
+    if (numero == 12 || numero == 28)
     {
         if (lectura == 0)
         {
@@ -312,7 +338,7 @@ int finales(nacion *reino)
 {
     if (reino->corrupcion > 19)
     {
-        printf("El Senado envenena tu comida para hacerse con el poder de La Embarrada.\n\nFIN.\n\n");
+        printf("El Senado, corrupto hasta en sus ra%cces, exilia al rey para hacerse con el poder de La Embarrada.\n\nFIN.\n\n", 161);
         return 1;
     }
     if (reino->economia < 1)
@@ -322,12 +348,12 @@ int finales(nacion *reino)
     }
     if (reino->religion > 19)
     {
-        printf("La influencia del Culto eclipsa al poder de la Corona.\n\nFIN.\n\n");
+        printf("La influencia del Culto eclipsa al poder de la Corona, enviando al rey de La Embarrada a morir en la hoguera.\n\nFIN.\n\n");
         return 1;
     }
     if (reino->religion < 1)
     {
-        printf("El Grande castiga a los herejes por su falta de fe inundando La Embarrada y destruy%endola completamente.\n\nFIN.\n\n", 130);
+        printf("El Grande castiga a los herejes por su falta de fe inundando La Embarrada y destruy%cndola completamente.\n\nFIN.\n\n", 130);
         return 1;
     }
     if (reino->defensa < 1)
@@ -337,7 +363,7 @@ int finales(nacion *reino)
     }
     if (reino->felicidad < 1)
     {
-        printf("Una turba furiosa entra al castillo y te lincha.\n\nFIN.\n\n");
+        printf("Una violenta multitud se descontrola y entra furiosa al castillo para linchar al rey de La Embarrada.\n\nFIN.\n\n");
         return 1;
     }
     return 0;
@@ -352,10 +378,7 @@ int dado_evento(int *array_eventos, int cantidad)
 
     if (array_eventos[numero] == 1)
     {
-        if (numero == 6 || numero == 9 || numero == 12)
-        {
-            return numero;
-        }
+        return numero;
     }
     return 0;
 }
@@ -375,6 +398,10 @@ void finales_eventos(int llave_evento)
 
     if (llave_evento == 12){
         printf("Una explosi%cn proveniente de los aposentos del alquimista destruye el castillo contigo dentro.\n\nFIN.\n\n", 162);
+    }
+
+    if (llave_evento == 28){
+        printf("Mientras atend%cas asuntos personales, el Consejero real clava una daga en tu espalda.\n\nFIN.\n\n", 161);
     }
 }
 
