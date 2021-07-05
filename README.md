@@ -1,7 +1,7 @@
 # PROYECTO: Soberano de La Embarrada - Grupo Default
 
 **Requisitos:**
-Compilador MS-DOS(para el uso de la libreria conio.h)
+Compilador MS-DOS (para el uso de la libreria conio.h)
 
 **Integrantes:**
 - Juan Araya Horta
