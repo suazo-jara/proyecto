@@ -59,7 +59,6 @@ int main()
 {
    
     Map *personajes = createMap(is_equal_int);
-    printf("Coco TF2 \n");
     system("cls");
     setSortFunction(personajes, lower_than_int);
     nacion *reino;
@@ -93,6 +92,7 @@ int main()
             reino->felicidad = 10;
             reino->defensa = 10;
 
+            //Pequeño prólogo al inicio del juego
             printf("%c", 218);
             for (int i = 0; i < 84; i++){
                 printf("%c", 196);
@@ -109,10 +109,10 @@ int main()
             printf("(Presiona ENTER para comenzar...)");
             limpiar_consola();
 
-            //Iteración donde ocurre el juego
+            //Iteración donde ocurre el juego. Si el jugador logra pasar todas las interacciones o si pulsa ESC, termina la iteración 
             while (cont < cantidad && lectura != 27 && lectura != 32)
             {
-                //Mostrar cualidades nacion
+                //Mostrar factores del reino
                 mostrar_nacion(reino);
                 //Juego
                 juego(personajes, array_personaje, array_eventos, cantidad, reino, &lectura);
@@ -133,6 +133,7 @@ int main()
                     break;
                 }
 
+                //Si no se termina el juego a causa de algún factor del reino, se verifica si debe terminar a causa de un evento
                 llave_evento = dado_evento(array_eventos, cantidad);
                 if (llave_evento != 0)
                 {
@@ -158,9 +159,8 @@ int main()
 //Función que lee el archivo "personajes.txt"
 void leer_archivo(Map *personajes)
 {
-    int cont = 0;
-    int cantidad = -1; //cantidad de personajes
-    int id = 0;
+    int cont = 0; //Contador para la lectura de la primera línea de personajes.txt
+    int dato = -1; //Dato que toca leer
     char *lectura = (char *)malloc(sizeof(char) * 1000);
 
     FILE *archivo = fopen("personajes.txt", "r");
@@ -172,6 +172,7 @@ void leer_archivo(Map *personajes)
     {
         fgetc(archivo);
         
+        //Iterador para leer la primera línea del archivo personajes.txt
         while (cont < 6)
         {
             fscanf(archivo, "%[^%\n]s", lectura);
@@ -179,47 +180,55 @@ void leer_archivo(Map *personajes)
             fgetc(archivo);
             cont++;
         }
- 
 
-        if (cantidad == 0)
+        //Se lee el primer dato (ID)
+        if (dato == 0)
         {
             npc->id = atoi(lectura);
         }
 
-        if (cantidad == 1)
+        //Se lee el segundo dato (nombre del NPC)
+        if (dato == 1)
         {
             strcpy(npc->nombre, lectura);
         }
 
-        if (cantidad == 2)
+        //Se lee el tercer dato (petición del NPC)
+        if (dato == 2)
         {
             strcpy(npc->peticion, lectura);
         }
 
-        if (cantidad == 3)
+        //Se lee el cuarto dato (opción A de la interacción)
+        if (dato == 3)
         {
             strcpy(npc->opcion_a, lectura);
         }
 
-        if (cantidad == 4)
+        //Se lee el quinto dato (opción B de la interacción)
+        if (dato == 4)
         {
             strcpy(npc->opcion_b, lectura);
         }
 
-        if (cantidad == 5)
+        //Se lee el sexto dato (consecuencia de la opción A)
+        if (dato == 5)
         {
-            pasar_consecuencia(lectura, npc, cantidad);
+            pasar_consecuencia(lectura, npc, dato);
         }
-        if (cantidad == 6)
+
+        //Se lee el séptimo dato (consecuencia de la opción A) y se reinicia el lector de datos
+        if (dato == 6)
         {
-            pasar_consecuencia(lectura, npc, cantidad);
+            pasar_consecuencia(lectura, npc, dato);
             insertMap(personajes, &npc->id, npc);
             npc = (NPC *)malloc(sizeof(NPC));
-            cantidad = -1;
+            dato = -1;
         }
         lectura = (char *)malloc(sizeof(char) * 5000);
 
-        cantidad++;
+        //El lector de datos aumenta para leer el próximo dato en la siguiente iteración
+        dato++;
     }
    
     free(npc);
@@ -228,7 +237,7 @@ void leer_archivo(Map *personajes)
 }
 
 //Función que pasa la consecuencia de la lectura al arreglo de la estructura NPC
-void pasar_consecuencia(char *lectura, NPC *npc, int cantidad)
+void pasar_consecuencia(char *lectura, NPC *npc, int dato)
 {
     int cont = 0;
     int numero;
@@ -237,7 +246,7 @@ void pasar_consecuencia(char *lectura, NPC *npc, int cantidad)
 
         if (isdigit(lectura[i]))
         {
-            if (cantidad == 5)
+            if (dato == 5)
             {
                 numero = lectura[i] - '0';
                 if (lectura[i - 1] == '-')
@@ -399,17 +408,19 @@ void juego(Map *personajes, int *array_personajes, int *array_eventos, int canti
 //Se desbloquean los eventos dependiendo de la opcion que el usuario escoja
 void eventos(int *array_eventos, int lectura, int numero)
 {
-    if (numero == 6 || numero == 9)
+    //Condición para desbloquear eventos cuando se relacionan a la opción A (0) de la interacción
+    if (numero == 12 || numero == 28)
     {
-        if (lectura == 1)
+        if (lectura == 0)
         {
             array_eventos[numero] = 1;
         }
     }
-
-    if (numero == 12 || numero == 28)
+    
+    //Condición para desbloquear eventos cuando se relacionan a la opción B (1) de la interacción
+    if (numero == 6 || numero == 9)
     {
-        if (lectura == 0)
+        if (lectura == 1)
         {
             array_eventos[numero] = 1;
         }
@@ -418,31 +429,42 @@ void eventos(int *array_eventos, int lectura, int numero)
 //Función que verifica los factores para determinar si se satisface la condición de un final malo
 int finales(nacion *reino)
 {
+    //Traición
     if (reino->corrupcion > 19)
     {
         printf("El Senado, corrupto hasta en sus ra%cces, exilia al rey para hacerse con el poder de La Embarrada.\n\nFIN.\n\n", 161);
         return 1;
     }
+    
+    //Hambre
     if (reino->economia < 1)
     {
         printf("La pobre administracion del Tesoro sume a La Embarrada en una fatal hambruna.\n\nFIN.\n\n");
         return 1;
     }
+
+    //Herejía
     if (reino->religion > 19)
     {
         printf("La influencia del Culto eclipsa al poder de la Corona, enviando al rey de La Embarrada a morir en la hoguera.\n\nFIN.\n\n");
         return 1;
     }
+
+    //Castigo divino
     if (reino->religion < 1)
     {
         printf("El Grande castiga a los herejes por su falta de fe inundando La Embarrada y destruy%cndola completamente.\n\nFIN.\n\n", 130);
         return 1;
     }
+
+    //Invasión
     if (reino->defensa < 1)
     {
         printf("Al enterarse de la deficiente defensa de La Embarrada, el reino vecino invade tu territorio.\n\nFIN.\n\n");
         return 1;
     }
+
+    //Rodarán cabezas
     if (reino->felicidad < 1)
     {
         printf("Una violenta multitud se descontrola y entra furiosa al castillo para linchar al rey de La Embarrada.\n\nFIN.\n\n");
@@ -451,13 +473,14 @@ int finales(nacion *reino)
     return 0;
 }
 
-//Función que retorna la clave relacionada a un evento. Si el evento existe, se retorna el índice relacionado a este, sino, retorna 0
+//Función que retorna la clave relacionada a un evento
 int dado_evento(int *array_eventos, int cantidad)
 {
 
     srand(time(NULL));
     int numero = rand() % cantidad;
 
+    //Si el evento está desbloqueado, se retorna el índice relacionado a este, sino, retorna 0
     if (array_eventos[numero] == 1)
     {
         return numero;
@@ -468,20 +491,24 @@ int dado_evento(int *array_eventos, int cantidad)
 //Función que muestra el final del evento relacionado a la llave que le corresponda
 void finales_eventos(int llave_evento)
 {
+    //Final: Primer Jinete
     if (llave_evento == 6)
     {
         printf("La poblaci%cn de La Embarrada sufre una cruel muerte ante la llegada de la peste negra.\n\nFIN.\n\n", 162);
         return;
     }
 
+    //Final: Tragedia shakesperiana
     if (llave_evento == 9){
-        printf("A v%csperas de sus 18 a%cos, tu hijo primigenio vierte veneno en tu boca mientras dorm%cas.\n\nFIN.\n\n", 161, 164, 161);
+        printf("A v%csperas de sus 18 a%cos, tu hijo primigenio vierte veneno en tu oreja mientras dorm%cas.\n\nFIN.\n\n", 161, 164, 161);
     }
 
+    //Final: Castle Bravo
     if (llave_evento == 12){
         printf("Una explosi%cn proveniente de los aposentos del alquimista destruye el castillo contigo dentro.\n\nFIN.\n\n", 162);
     }
 
+    //Final: Et tu, Brute?
     if (llave_evento == 28){
         printf("Mientras atend%cas asuntos personales, el Consejero real clava una daga en tu espalda.\n\nFIN.\n\n", 161);
     }
@@ -510,6 +537,8 @@ int dado_personajes(Map *personajes, int *array_personajes, int cantidad)
     srand(time(NULL));
     int verificar = 0;
     int numero;
+    
+    //Mientras se generen ID relacionadas a NPC cuya interacción ya ocurrión, se generará otro número aleatorio
     while (verificar == 0)
     {
         numero = rand() % cantidad;
@@ -650,6 +679,7 @@ void modificar_nacion(NPC *iterador, int lectura, nacion *reino)
                 if (lectura == 0) cambio = iterador->consecuencia_a[i];
                 else if (lectura == 1) cambio = iterador->consecuencia_b[i];
 
+                //Si una consecuencia no afecta en cierto factor, se omite
                 if(cambio == 0){
                     continue;
                 }
