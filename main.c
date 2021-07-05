@@ -57,8 +57,10 @@ int lower_than_int(void *, void *);
 
 int main()
 {
-
+   
     Map *personajes = createMap(is_equal_int);
+    printf("Coco TF2 \n");
+    system("cls");
     setSortFunction(personajes, lower_than_int);
     nacion *reino;
 
@@ -149,6 +151,7 @@ int main()
             }
         }
     }
+    
     return 0;
 }
 
@@ -159,13 +162,16 @@ void leer_archivo(Map *personajes)
     int cantidad = -1; //cantidad de personajes
     int id = 0;
     char *lectura = (char *)malloc(sizeof(char) * 1000);
+
     FILE *archivo = fopen("personajes.txt", "r");
+
     NPC *npc = (NPC *)malloc(sizeof(NPC));
+
 
     while (fscanf(archivo, "%[^%\n]s", lectura) != EOF)
     {
         fgetc(archivo);
-
+        
         while (cont < 6)
         {
             fscanf(archivo, "%[^%\n]s", lectura);
@@ -173,6 +179,7 @@ void leer_archivo(Map *personajes)
             fgetc(archivo);
             cont++;
         }
+ 
 
         if (cantidad == 0)
         {
@@ -214,8 +221,10 @@ void leer_archivo(Map *personajes)
 
         cantidad++;
     }
+   
     free(npc);
     free(lectura);
+
 }
 
 //Función que pasa la consecuencia de la lectura al arreglo de la estructura NPC
@@ -255,6 +264,7 @@ void pasar_consecuencia(char *lectura, NPC *npc, int cantidad)
             cont++;
         }
     }
+
 }
 
 //Función que muestra el menu principal
