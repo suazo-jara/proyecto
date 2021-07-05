@@ -288,22 +288,92 @@ void juego(Map *personajes, int *array_personajes, int *array_eventos, int canti
     int numero;
     int cont = 0;
     int opcion = 0;
+    int cantidad_letras = 0;
+    int aux = 0;
 
     //Lanzar dado para seleccionar personaje
     numero = dado_personajes(personajes, array_personajes, cantidad);
     //Buscar personaje
     iterador = searchMap(personajes, &numero);
 
+    //Calculo del largo de las lineas
+    cantidad_letras = strlen(iterador->peticion);
+    if(cantidad_letras < (strlen(iterador->opcion_a) + 5)){
+        cantidad_letras = strlen(iterador->opcion_a) + 5;
+    }
+    if(cantidad_letras< (strlen(iterador->opcion_b) + 5)){
+        cantidad_letras = strlen(iterador->opcion_b) + 5;
+    }
+    cantidad_letras+= 4;
+    
+    //Mostrar por pantalla lineas
+    printf("%c", 218);
+    for (int i = 0; i < (cantidad_letras); i++){
+        printf("%c", 196);
+    }
+    printf("%c\n", 191);
+    aux = strlen(iterador->nombre);
+
     //Mostrar personaje
-    printf("%s:\n", iterador->nombre);
-    printf("%s\n\n", iterador->peticion);
+    printf("%c  %s:",179, iterador->nombre);
+    //Mostrar por pantalla lineas
+    for (int i = 0; i < (cantidad_letras); i++){
+        printf(" ");
+        if(i == (cantidad_letras - aux - 4)){
+            printf("%c", 179);
+        }
+    }
+    
+    //Mostrar peticion
+    printf("\n%c  %s",179, iterador->peticion);
+    //Mostrar por pantalla lineas
+    aux = strlen(iterador->peticion);
+    for (int i = 0; i < (cantidad_letras); i++){
+        printf(" ");
+        if(i == (cantidad_letras - aux - 3)){
+            printf("%c", 179);
+        }
+    }
+    printf("\n%c", 195);
+    for (int i = 0; i < cantidad_letras; i++){
+        printf("%c", 196);
+    }
+    printf("%c\n", 180);
     //Opcion 0
-    printf("0. %s \n\n", iterador->opcion_a);
+    printf("%c  0. %s ", 179, iterador->opcion_a);
+    //Mostrar por pantalla lineas
+    aux = strlen(iterador->opcion_a);
+    for (int i = 0; i < (cantidad_letras); i++){
+        printf(" ");
+        if(i == (cantidad_letras - aux - 7)){
+            printf("%c", 179);
+        }
+    }
+    printf("\n%c", 195);
     //mostrar_consecuencias(iterador, opcion);
+    for (int i = 0; i < cantidad_letras; i++){
+        printf("%c", 196);
+    }
+    printf("%c", 180);
+
     //Opcion 1
     opcion = 1;
-    printf("1. %s \n\n", iterador->opcion_b);
+    printf("\n%c  1. %s",179, iterador->opcion_b,179);
+    //Mostrar por pantalla lineas
+    aux = strlen(iterador->opcion_b);
+    for (int i = 0; i < (cantidad_letras); i++){
+        printf(" ");
+        if(i == (cantidad_letras - aux - 6)){
+            printf("%c", 179);
+        }
+    }
+    printf("\n%c", 192);
+    for (int i = 0; i < cantidad_letras; i++){
+        printf("%c", 196);
+    }
+    printf("%c\n", 217);
     //mostrar_consecuencias(iterador, opcion);
+
     //Seleccionar opcion
     printf("%cQu%c desea la voluntad de Su Alteza?\n\n", 168, 130);
     //Opcion Espacio Huir
@@ -408,8 +478,18 @@ void finales_eventos(int llave_evento)
 //Función que muestra el valor actual de los factores del reino
 void mostrar_nacion(nacion *reino)
 {
-    printf("                           ESTADO DE LA EMBARRADA\n");
-    printf("| Corrupci%cn: %i | Defensa: %i | Econom%ca: %i | Felicidad: %i | Religi%cn: %i |\n\n", 162, reino->corrupcion, reino->defensa, 161, reino->economia, reino->felicidad, 162, reino->religion);
+    printf("%c", 218);
+    for (int i = 0; i < 84; i++){
+        printf("%c", 196);
+    }
+    printf("%c\n", 191);
+    printf("                             ESTADO DE LA EMBARRADA                                   \n");
+    printf("      Corrupci%cn: %i | Defensa: %i | Econom%ca: %i | Felicidad: %i | Religi%cn: %i", 162, reino->corrupcion, reino->defensa, 161, reino->economia, reino->felicidad, 162, reino->religion);
+    printf("\n%c", 192);
+    for (int i = 0; i < 84; i++){
+        printf("%c", 196);
+    }
+    printf("%c\n\n", 217);
 }
 
 //Función que llama por ID a un personaje aleatorio con el que el jugador aún no ha interactuado
