@@ -214,6 +214,8 @@ void leer_archivo(Map *personajes)
 
         cantidad++;
     }
+    free(npc);
+    free(lectura);
 }
 
 //Función que pasa la consecuencia de la lectura al arreglo de la estructura NPC
