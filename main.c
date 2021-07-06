@@ -361,7 +361,7 @@ void juego(Map *personajes, int *array_personajes, int *array_eventos, int canti
     }
     printf("%c\n", 180);
     //Opcion 0
-    printf("%c  0. %s ", 179, iterador->opcion_a);
+    printf("%c  A. %s ", 179, iterador->opcion_a);
     //Mostrar por pantalla lineas
     aux = strlen(iterador->opcion_a);
     for (int i = 0; i < (cantidad_letras); i++){
@@ -379,7 +379,7 @@ void juego(Map *personajes, int *array_personajes, int *array_eventos, int canti
 
     //Opcion 1
     opcion = 1;
-    printf("\n%c  1. %s",179, iterador->opcion_b,179);
+    printf("\n%c  B. %s",179, iterador->opcion_b,179);
     //Mostrar por pantalla lineas
     aux = strlen(iterador->opcion_b);
     for (int i = 0; i < (cantidad_letras); i++){
@@ -396,9 +396,10 @@ void juego(Map *personajes, int *array_personajes, int *array_eventos, int canti
     //mostrar_consecuencias(iterador, opcion);
 
     //Seleccionar opcion
-    printf("%cQu%c desea la voluntad de Su Alteza?\n\n", 168, 130);
+    printf("\n%cQu%c desea la voluntad de Su Alteza?\n\n", 168, 130);
     //Opcion Espacio Huir
     printf("(Presiona ESPACIO para huir de tus labores...)\n\n");
+    printf("Ingrese su decisi%cn: ", 162);
     *lectura = leer_tecla();
     modificar_nacion(iterador, *lectura, reino);
     //Modificar array de eventos
@@ -522,7 +523,7 @@ void mostrar_nacion(nacion *reino)
         printf("%c", 196);
     }
     printf("%c\n", 191);
-    printf("                             ESTADO DE LA EMBARRADA                                   \n");
+    printf("                                ESTADO DE LA EMBARRADA                                   \n");
     printf("      Corrupci%cn: %i | Defensa: %i | Econom%ca: %i | Felicidad: %i | Religi%cn: %i", 162, reino->corrupcion, reino->defensa, 161, reino->economia, reino->felicidad, 162, reino->religion);
     printf("\n%c", 192);
     for (int i = 0; i < 84; i++){
